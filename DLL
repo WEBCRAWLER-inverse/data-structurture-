@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a doubly linked list node
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the end of the list
+void insertAtEnd(struct Node** head, int data) {
+  struct Node* temp = *head;
+    struct Node* newNode = createNode(data);
+
+    // If the list is empty, the new node becomes the head
+    if (*head == NULL) {
+	*head = newNode;
+	return;
+    }
+
+    // Traverse to the last node
+
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    
+    // Set the new node as the next of the last node and update previous pointer
+    temp->next = newNode;
+    newNode->prev = temp;
+}
+
+// Function to delete a node from the end of the list
+void deleteAtEnd(struct Node** head) {
+struct Node* temp = *head;
+    if (*head == NULL) {
+	printf("List is empty. Nothing to delete.\n");
+	return;
+    }
+
+    // If there's only one node
+    if ((*head)->next == NULL) {
+	free(*head);
+	*head = NULL;
+	return;
+    }
+
+    // Traverse to the last node
+
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    
+    // Update the second last node's next pointer and free the last node
+    temp->prev->next = NULL;
+    free(temp);
+}
+
+// Function to print the list forward
+void printListForward(struct Node* head) {
+    struct Node* temp = head;
+    printf("List (forward): ");
+    while (temp != NULL) {
+	printf("%d -> ", temp->data);
+	temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Function to print the list backward
+void printListBackward(struct Node* head) {
+ struct Node* temp = head;
+    if (head == NULL) {
+	printf("List is empty.\n");
+	return;
+    }
+
+    // Traverse to the last node
+
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+
+    // Traverse the list backward using the prev pointer
+    printf("List (backward): ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->prev;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    // Start with an empty list
+    struct Node* head = NULL;
+
+    // Insert elements at the end
+    insertAtEnd(&head, 10);
+    insertAtEnd(&head, 20);
+    insertAtEnd(&head, 30);
+
+    // Print the list forward
+    printListForward(head);
+
+    // Print the list backward
+    printListBackward(head);
+
+    // Delete elements from the end
+    deleteAtEnd(&head);
+    printListForward(head);
+
+    deleteAtEnd(&head);
+    printListForward(head);
+
+    deleteAtEnd(&head);
+    printListForward(head);
+    getch();
+    return 0;
+}
