@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a linked list node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to check if the stack is empty
+int isEmpty(struct Node* top) {
+    return top == NULL;
+}
+
+// Function to push an element onto the stack
+void push(struct Node** top, int data) {
+    struct Node* newNode = createNode(data);
+    newNode->next = *top;  // Link the new node to the current top
+    *top = newNode;        // Update the top to point to the new node
+    printf("%d pushed to stack\n", data);
+}
+
+// Function to pop an element from the stack
+int pop(struct Node** top) {
+ struct Node* temp = *top;
+   int poppedData = temp->data;
+    if (isEmpty(*top)) {
+        printf("Stack underflow\n");
+        return -1;
+    }
+
+
+    *top = (*top)->next;   // Update the top to the next node
+    free(temp);            // Free the memory of the popped node
+    return poppedData;
+}
+
+// Function to get the top element of the stack without popping
+int peek(struct Node* top) {
+    if (isEmpty(top)) {
+        printf("Stack is empty\n");
+        return -1;
+    }
+    return top->data;
+}
+
+// Function to display the stack elements
+void displayStack(struct Node* top) {
+struct Node* temp = top;
+    if (isEmpty(top)) {
+        printf("Stack is empty\n");
+        return;
+    }
+
+    printf("Stack elements: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* top = NULL;  // Initialize the stack as empty
+
+    push(&top, 10);
+    push(&top, 20);
+    push(&top, 30);
+
+    displayStack(top);
+
+    printf("%d popped from stack\n", pop(&top));
+    printf("Top element is %d\n", peek(top));
+
+    displayStack(top);
+getch();
+    return 0;
+}
